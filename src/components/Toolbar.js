@@ -5,7 +5,9 @@ import {
 	updateReadMessages,
 	updateUnreadMessages,
 	updateAll,
-	updateLabelState
+	updateLabelState,
+	updateRemovedMessages,
+	renderCompose
 } from "../actions";
 
 class Toolbar extends Component {
@@ -68,7 +70,9 @@ class Toolbar extends Component {
 						<span className="badge badge">{this.unreadMessageCount()}</span>
 						unread messages
 					</p>
-					<a className="btn btn-danger" onClick={() => this.props.compose()}>
+					<a
+						className="btn btn-danger"
+						onClick={() => this.props.renderCompose()}>
 						<i className="fa fa-plus" />
 					</a>
 					<button
@@ -124,9 +128,11 @@ class Toolbar extends Component {
 }
 
 const mapStateToProps = state => {
+	const compose = state.compose;
 	const messages = state.messages;
 	return {
-		messages
+		messages,
+		compose
 	};
 };
 
@@ -136,7 +142,9 @@ const mapDispatchToProps = dispatch =>
 			updateReadMessages,
 			updateUnreadMessages,
 			updateAll,
-			updateLabelState
+			updateLabelState,
+			updateRemovedMessages,
+			renderCompose
 		},
 		dispatch
 	);

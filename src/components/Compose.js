@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { renderCompose, submitForm } from "../actions";
 
 class Compose extends Component {
 	constructor(props) {
@@ -59,4 +62,22 @@ class Compose extends Component {
 	}
 }
 
-export default Compose;
+const mapStateToProps = state => {
+	const compose = state.compose;
+	const messages = state.messages;
+	return {
+		messages,
+		compose
+	};
+};
+
+const mapDispatchToProps = dispatch =>
+	bindActionCreators(
+		{
+			renderCompose,
+			submitForm
+		},
+		dispatch
+	);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Compose);

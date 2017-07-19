@@ -22,8 +22,6 @@ class MessageList extends Component {
 						starred={message.starred}
 						read={message.read}
 						subject={message.subject}
-						// selectAll={this.props.selectAll}
-						// updateState={this.props.updateState}
 					/>
 				)}
 			</div>

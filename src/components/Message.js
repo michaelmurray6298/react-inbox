@@ -33,8 +33,8 @@ class Message extends Component {
 					</div>
 				</div>
 				<div className="col-xs-11">
-					{this.props.labels.map(label =>
-						<Label label={label} key={label.id} />
+					{this.props.labels.map((label, index) =>
+						<Label label={label} key={index} />
 					)}
 					<span>
 						{this.props.subject}

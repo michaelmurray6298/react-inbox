@@ -6,21 +6,11 @@ import {
 	UPDATE_READ,
 	UPDATE_UNREAD,
 	UPDATE_ALL,
-	UPDATE_LABEL_STATE
+	UPDATE_LABEL_STATE,
+	UPDATE_REMOVED_MESSAGES,
+	RENDER_COMPOSE,
+	COMPOSE_MESSAGE
 } from "../actions";
-
-function addNewLabel(msg, newLabel) {
-	if (!msg.labels.includes(newLabel)) {
-		msg.labels.push(newLabel);
-	}
-	return { labels: msg.labels };
-}
-
-function deleteSelectedLabel(msg, newLabel) {
-	let index = msg.labels.indexOf(newLabel);
-	msg.labels.splice(index, 1);
-	return { labels: msg.labels };
-}
 
 function messages(state = [], action) {
 	switch (action.type) {
@@ -61,28 +51,30 @@ function messages(state = [], action) {
 			return state.map(msg => Object.assign(msg, action.update));
 
 		case UPDATE_LABEL_STATE:
-			let msgs = [];
-			let msgLabels;
-			return state.map(msg => {
-				if (msg.selected === true) {
-					console.log(action.add);
-					if (action.add === "add") {
-						msgLabels = addNewLabel(msg, action.newLabel);
-					} else {
-						msgLabels = deleteSelectedLabel(msg, action.newLabel);
-					}
-					msgs.push(Object.assign({}, msg, msgLabels));
-				} else {
-					msgs.push(msg);
-				}
-				return Object.assign({}, ...msgs, msg);
-			});
+			const msgs = action.messages;
+			return [...msgs];
+		case UPDATE_REMOVED_MESSAGES:
+			let newMessages = action.messages;
+			return [...newMessages];
 
+		case COMPOSE_MESSAGE:
+			const updatedMessage = action.data;
+			return [...state, updatedMessage];
+
+		default:
+			return state;
+	}
+}
+function compose(state = false, action) {
+	switch (action.type) {
+		case RENDER_COMPOSE:
+			return !action.compose;
 		default:
 			return state;
 	}
 }
 
 export default combineReducers({
-	messages
+	messages,
+	compose
 });

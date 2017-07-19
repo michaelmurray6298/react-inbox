@@ -5,6 +5,9 @@ export const UPDATE_READ = "UPDATE_READ";
 export const UPDATE_UNREAD = "UPDATE_UNREAD";
 export const UPDATE_ALL = "UPDATE_ALL";
 export const UPDATE_LABEL_STATE = "UPDATE_LABEL_STATE";
+export const UPDATE_REMOVED_MESSAGES = "UPDATE_REMOVED_MESSAGES";
+export const RENDER_COMPOSE = "RENDER_COMPOSE";
+export const COMPOSE_MESSAGE = "COMPOSE_MESSAGE";
 
 export function fetchMessages() {
 	return async (dispatch, getState, { Api }) => {
@@ -12,7 +15,6 @@ export function fetchMessages() {
 		messages.forEach(message => {
 			message.selected = false;
 		});
-		console.log(messages);
 		return dispatch({
 			type: MESSAGES_RECEIVED,
 			messages
@@ -158,8 +160,7 @@ export function updateLabelState(newLabel, add) {
 			});
 			return dispatch({
 				type: UPDATE_LABEL_STATE,
-				newLabel,
-				add
+				messages
 			});
 		} else {
 			await fetch(`http://localhost:8181/api/messages`, {
@@ -176,8 +177,68 @@ export function updateLabelState(newLabel, add) {
 			});
 			return dispatch({
 				type: UPDATE_LABEL_STATE,
-				newLabel
+				messages
 			});
 		}
+	};
+}
+
+export function updateRemovedMessages() {
+	return async (dispatch, getState) => {
+		let messages = [];
+		let messageIds = [];
+
+		getState().messages.forEach(msg => {
+			if (msg.selected) {
+				messageIds.push(msg.id);
+			} else {
+				messages.push(msg);
+			}
+		});
+		fetch(`http://localhost:8181/api/messages`, {
+			method: "PATCH",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				messageIds: messageIds,
+				command: "delete"
+			})
+		});
+		return dispatch({
+			type: UPDATE_REMOVED_MESSAGES,
+			messages
+		});
+	};
+}
+export function renderCompose() {
+	return (dispatch, getState) => {
+		const compose = getState().compose;
+		return dispatch({
+			type: RENDER_COMPOSE,
+			compose
+		});
+	};
+}
+
+export function submitForm(form) {
+	return async (dispatch, getState) => {
+		let response = await fetch(`http://localhost:8181/api/messages`, {
+			method: "POST",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				subject: form.subjectValue,
+				body: form.bodyValue
+			})
+		});
+		let data = await response.json();
+		return dispatch({
+			type: COMPOSE_MESSAGE,
+			data
+		});
 	};
 }
