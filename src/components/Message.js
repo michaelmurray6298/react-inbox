@@ -1,30 +1,10 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { toggleStarred, toggleSelected } from "../actions";
 import Label from "./Labels.js";
 
 class Message extends Component {
-	toggleStarred() {
-		let isStarred = !this.props.starred;
-		fetch(`http://localhost:8181/api/messages`, {
-			method: "PATCH",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify({
-				messageIds: [this.props.id],
-				command: "star",
-				star: isStarred
-			})
-		}).then(() => {
-			this.props.updateState(this.props.id, { starred: isStarred });
-		});
-	}
-
-	toggleChecked() {
-		let isSelected = !this.props.selected;
-		this.props.updateState(this.props.id, { selected: isSelected });
-	}
-
 	render() {
 		const read = this.props.read ? "read" : "unread";
 		const selected = this.props.selected ? "selected" : "";
@@ -38,14 +18,15 @@ class Message extends Component {
 							<input
 								type="checkbox"
 								checked={`${checked}`}
-								onChange={() => this.toggleChecked()}
+								onChange={() =>
+									this.props.toggleSelected(this.props.id, this.props.selected)}
 							/>
 						</div>
 						<div className="col-xs-2">
 							<i
 								className={`star fa ${starred}`}
 								onClick={() => {
-									this.toggleStarred();
+									this.props.toggleStarred(this.props.id, this.props.starred);
 								}}
 							/>
 						</div>
@@ -63,5 +44,20 @@ class Message extends Component {
 		);
 	}
 }
+const mapStateToProps = state => {
+	const messages = state.messages;
+	return {
+		messages
+	};
+};
 
-export default Message;
+const mapDispatchToProps = dispatch =>
+	bindActionCreators(
+		{
+			toggleStarred,
+			toggleSelected
+		},
+		dispatch
+	);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Message);
