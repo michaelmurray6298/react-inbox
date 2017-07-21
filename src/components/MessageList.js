@@ -8,6 +8,7 @@ class MessageList extends Component {
 	componentDidMount() {
 		this.props.fetchMessages();
 	}
+
 	render() {
 		const { messages } = this.props;
 
@@ -22,6 +23,7 @@ class MessageList extends Component {
 						starred={message.starred}
 						read={message.read}
 						subject={message.subject}
+						location={this.props.location}
 					/>
 				)}
 			</div>
@@ -30,8 +32,10 @@ class MessageList extends Component {
 }
 const mapStateToProps = state => {
 	const messages = state.messages;
+	const messageById = state.messagesById
 	return {
-		messages
+		messages,
+		messageById
 	};
 };
 

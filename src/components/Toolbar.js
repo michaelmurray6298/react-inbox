@@ -6,10 +6,9 @@ import {
 	updateUnreadMessages,
 	updateAll,
 	updateLabelState,
-	updateRemovedMessages,
-	renderCompose
+	updateRemovedMessages
 } from "../actions";
-
+import {Link} from "react-router-dom"
 class Toolbar extends Component {
 	calculateSelected() {
 		let selectAll = "minus-";
@@ -62,6 +61,7 @@ class Toolbar extends Component {
 	}
 
 	render() {
+		const composeLink = this.props.location === "/compose" ? "/" : "/compose"
 		const disabled = this.selectedMessagesCount() > 0 ? "" : "disabled";
 		return (
 			<div className="row toolbar">
@@ -70,11 +70,9 @@ class Toolbar extends Component {
 						<span className="badge badge">{this.unreadMessageCount()}</span>
 						unread messages
 					</p>
-					<a
-						className="btn btn-danger"
-						onClick={() => this.props.renderCompose()}>
-						<i className="fa fa-plus" />
-					</a>
+						<Link to={composeLink} className="btn btn-danger">
+							<i className="fa fa-plus" />
+						</Link>
 					<button
 						className="btn btn-default"
 						onClick={() => this.selectAllMessages()}>
@@ -128,11 +126,9 @@ class Toolbar extends Component {
 }
 
 const mapStateToProps = state => {
-	const compose = state.compose;
 	const messages = state.messages;
 	return {
-		messages,
-		compose
+		messages
 	};
 };
 
@@ -143,8 +139,7 @@ const mapDispatchToProps = dispatch =>
 			updateUnreadMessages,
 			updateAll,
 			updateLabelState,
-			updateRemovedMessages,
-			renderCompose
+			updateRemovedMessages
 		},
 		dispatch
 	);

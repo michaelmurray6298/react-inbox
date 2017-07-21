@@ -8,8 +8,7 @@ import {
 	UPDATE_ALL,
 	UPDATE_LABEL_STATE,
 	UPDATE_REMOVED_MESSAGES,
-	RENDER_COMPOSE,
-	COMPOSE_MESSAGE
+	COMPOSE_MESSAGE, FETCH_MESSAGES_BY_ID, UPDATE_READ_BY_ID
 } from "../actions";
 
 function messages(state = [], action) {
@@ -28,6 +27,7 @@ function messages(state = [], action) {
 			});
 		case TOGGLE_SELECTED:
 			return state.map(message => {
+				console.log(message);
 				if (message.id === action.id) {
 					message.selected = !message.selected;
 				}
@@ -65,16 +65,22 @@ function messages(state = [], action) {
 			return state;
 	}
 }
-function compose(state = false, action) {
+function messagesById(state=[], action){
 	switch (action.type) {
-		case RENDER_COMPOSE:
-			return !action.compose;
+		case FETCH_MESSAGES_BY_ID:
+			console.log(action.data);
+			const messagesWithIds = action.data
+			return {...messagesWithIds}
+		case UPDATE_READ_BY_ID:
+		console.log(state);
+			return {...state,
+							read: true}
 		default:
-			return state;
+		return state
 	}
 }
 
 export default combineReducers({
 	messages,
-	compose
+	messagesById
 });

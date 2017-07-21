@@ -6,14 +6,16 @@ export const UPDATE_UNREAD = "UPDATE_UNREAD";
 export const UPDATE_ALL = "UPDATE_ALL";
 export const UPDATE_LABEL_STATE = "UPDATE_LABEL_STATE";
 export const UPDATE_REMOVED_MESSAGES = "UPDATE_REMOVED_MESSAGES";
-export const RENDER_COMPOSE = "RENDER_COMPOSE";
 export const COMPOSE_MESSAGE = "COMPOSE_MESSAGE";
+export const FETCH_MESSAGES_BY_ID = "FETCH_MESSAGES_BY_ID"
+export const UPDATE_READ_BY_ID = "UPDATE_READ_BY_ID"
 
 export function fetchMessages() {
 	return async (dispatch, getState, { Api }) => {
 		const messages = await Api.fetchMessages();
 		messages.forEach(message => {
 			message.selected = false;
+
 		});
 		return dispatch({
 			type: MESSAGES_RECEIVED,
@@ -21,6 +23,43 @@ export function fetchMessages() {
 		});
 	};
 }
+
+export function fetchMessagesById(path) {
+	return async (dispatch, getState) => {
+		let response = await fetch(`http://localhost:8181/api${path}`);
+		let data = await response.json();
+		console.log(data);
+		dispatch({
+			type: FETCH_MESSAGES_BY_ID,
+			data
+		});
+	};
+}
+
+export function updateReadMessagesById(id, e) {
+	// e.preventDefault()
+	console.log(e);
+	return async (dispatch, getState) => {
+		let messageById = getState().messagesById
+		await fetch(`http://localhost:8181/api/messages`, {
+			method: "PATCH",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				messageIds: [id],
+				command: "read",
+				read: true
+			})
+		});
+		return dispatch({
+			type: UPDATE_READ_BY_ID,
+			messageById
+		});
+	};
+}
+
 
 export function toggleStarred(id, initialValue) {
 	return async (dispatch, getState) => {
@@ -43,7 +82,7 @@ export function toggleStarred(id, initialValue) {
 	};
 }
 
-export function toggleSelected(id, initialValue) {
+export function toggleSelected(id) {
 	return (dispatch, getState) => {
 		return dispatch({
 			type: TOGGLE_SELECTED,
@@ -212,15 +251,6 @@ export function updateRemovedMessages() {
 		});
 	};
 }
-export function renderCompose() {
-	return (dispatch, getState) => {
-		const compose = getState().compose;
-		return dispatch({
-			type: RENDER_COMPOSE,
-			compose
-		});
-	};
-}
 
 export function submitForm(form) {
 	return async (dispatch, getState) => {
@@ -236,7 +266,7 @@ export function submitForm(form) {
 			})
 		});
 		let data = await response.json();
-		return dispatch({
+		dispatch({
 			type: COMPOSE_MESSAGE,
 			data
 		});

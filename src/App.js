@@ -4,9 +4,22 @@ import Toolbar from "./components/Toolbar.js";
 import Compose from "./components/Compose.js";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { renderCompose, submitForm } from "../src/actions";
+import { submitForm } from "../src/actions";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
+
+const ComposeRoute = () => {
+	return <Compose submitForm={submitForm} />;
+};
+
+const Home = (props) => (
+	<div>
+		<Toolbar location={props.location.pathname} />
+		<Route exact path="/compose" component={ComposeRoute} />
+		<MessageList location={props.location.pathname}/>
+	</div>
+)
 
 class App extends Component {
 	render() {
@@ -17,11 +30,12 @@ class App extends Component {
 					<h2>Welcome to React Inbox</h2>
 				</div>
 				<div className="container">
-					<Toolbar />
-					{this.props.compose
-						? <Compose submitForm={this.props.submitForm} />
-						: null}
-					<MessageList />
+					<Router>
+						<div>
+							<Route path="/" component={Home} />
+
+						</div>
+					</Router>
 				</div>
 			</div>
 		);
@@ -29,18 +43,15 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-	const compose = state.compose;
 	const messages = state.messages;
 	return {
-		messages,
-		compose
+		messages
 	};
 };
 
 const mapDispatchToProps = dispatch =>
 	bindActionCreators(
 		{
-			renderCompose,
 			submitForm
 		},
 		dispatch

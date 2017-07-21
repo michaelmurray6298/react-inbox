@@ -1,12 +1,19 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { toggleStarred, toggleSelected } from "../actions";
+import { toggleStarred, toggleSelected, updateReadMessagesById } from "../actions";
+import { Link, Route  } from "react-router-dom"
 import Label from "./Labels.js";
+import MessageBody from "./MessageBody.js"
+
+const MessageBodyRoute = (props) => (
+	<MessageBody location={props.location.pathname} match={props.match}/>
+)
 
 class Message extends Component {
-	render() {
-		const read = this.props.read ? "read" : "unread";
+	render(){
+
+		const read = this.props.read ? "read" : "unread"
 		const selected = this.props.selected ? "selected" : "";
 		const checked = this.props.selected ? "checked" : "";
 		const starred = this.props.starred ? "fa-star" : "fa-star-o";
@@ -18,8 +25,7 @@ class Message extends Component {
 							<input
 								type="checkbox"
 								checked={`${checked}`}
-								onChange={() =>
-									this.props.toggleSelected(this.props.id, this.props.selected)}
+								onChange={() => this.props.toggleSelected(this.props.id)}
 							/>
 						</div>
 						<div className="col-xs-2">
@@ -36,9 +42,13 @@ class Message extends Component {
 					{this.props.labels.map((label, index) =>
 						<Label label={label} key={index} />
 					)}
-					<span>
-						{this.props.subject}
-					</span>
+					<Link onClick={(e) => this.props.updateReadMessagesById(this.props.id, e)} to={`/messages/${this.props.id}`}>{this.props.subject}</Link>
+
+						<Route exact path={`/messages/${this.props.id}`} component={MessageBodyRoute} />
+
+
+
+
 				</div>
 			</div>
 		);
@@ -46,8 +56,10 @@ class Message extends Component {
 }
 const mapStateToProps = state => {
 	const messages = state.messages;
+	const messageById = state.messagesById
 	return {
-		messages
+		messages,
+		messageById
 	};
 };
 
@@ -55,7 +67,8 @@ const mapDispatchToProps = dispatch =>
 	bindActionCreators(
 		{
 			toggleStarred,
-			toggleSelected
+			toggleSelected,
+			updateReadMessagesById
 		},
 		dispatch
 	);

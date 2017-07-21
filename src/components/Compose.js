@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { renderCompose, submitForm } from "../actions";
+import { submitForm } from "../actions";
+import {Redirect} from "react-router-dom"
 
 class Compose extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			fireRedirect: false
+		}
 		this.handleForm = this.handleForm.bind(this);
 	}
 	handleForm(e) {
@@ -14,9 +18,12 @@ class Compose extends Component {
 			subjectValue: e.target.subject.value,
 			bodyValue: e.target.body.value
 		});
+		this.setState({ fireRedirect: true })
+
 	}
 
 	render() {
+		const { fireRedirect } = this.state
 		return (
 			<form className="form-horizontal well" onSubmit={this.handleForm}>
 				<div className="form-group">
@@ -56,25 +63,26 @@ class Compose extends Component {
 					<div className="col-sm-8 col-sm-offset-2">
 						<input type="submit" value="Send" className="btn btn-primary" />
 					</div>
-				</div>
-			</form>
+
+				{fireRedirect && (
+          <Redirect to='/'/>
+        )}
+			</div>
+		</form>
 		);
 	}
 }
 
 const mapStateToProps = state => {
-	const compose = state.compose;
 	const messages = state.messages;
 	return {
-		messages,
-		compose
+		messages
 	};
 };
 
 const mapDispatchToProps = dispatch =>
 	bindActionCreators(
 		{
-			renderCompose,
 			submitForm
 		},
 		dispatch
