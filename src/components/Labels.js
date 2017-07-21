@@ -1,13 +1,13 @@
-import React, { Component } from "react";
+import React, { PureComponent } from 'react';
 
-class Labels extends Component {
-	render() {
-		return (
-			<span className="label label-warning">
-				{this.props.label}
-			</span>
-		);
-	}
+class Labels extends PureComponent {
+  render() {
+    return (
+      <span className="label label-warning">
+        {this.props.label}
+      </span>
+    );
+  }
 }
 
 export default Labels;
