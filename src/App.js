@@ -26,7 +26,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <h2>Welcome to React Inbox</h2>
       </div>
-      <div className="container">
+      <div>
         <Router>
           <div>
             <Route path="/" component={Home} />

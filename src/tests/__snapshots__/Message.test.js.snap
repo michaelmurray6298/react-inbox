@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Message should render 1`] = `
+<div
+  className="row message unread "
+  id="read-value"
+>
+  <div
+    className="col-xs-1"
+  >
+    <div
+      className="row"
+    >
+      <div
+        className="col-xs-2"
+      >
+        <input
+          checked=""
+          id="select-button"
+          onChange={[Function]}
+          type="checkbox"
+        />
+      </div>
+      <div
+        className="col-xs-2"
+      >
+        <i
+          className="star fa fa-star-o"
+          id="star-button"
+          onClick={[Function]}
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="col-xs-11"
+  >
+    <Link
+      onClick={[Function]}
+      replace={false}
+      to="/messages/1"
+    >
+      Hi
+       
+    </Link>
+    <Route
+      component={[Function]}
+      exact={true}
+      path="/messages/1"
+    />
+  </div>
+</div>
+`;

@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MessageList should render 1`] = `
+<div
+  className="container"
+>
+  <Connect(Message)
+    id={1}
+    labels={
+      Array [
+        "dev",
+        "personal",
+      ]
+    }
+    read={false}
+    starred={true}
+    subject="You can't input the protocol without calculating the mobile RSS protocol!"
+  />
+  <Connect(Message)
+    id={2}
+    labels={Array []}
+    read={false}
+    selected={true}
+    starred={false}
+    subject="connecting the system won't do anything, we need to input the mobile AI panel!"
+  />
+  <Connect(Message)
+    id={3}
+    labels={
+      Array [
+        "dev",
+      ]
+    }
+    read={false}
+    starred={true}
+    subject="Use the 1080p HTTP feed, then you can parse the cross-platform hard drive!"
+  />
+  <Connect(Message)
+    id={4}
+    labels={Array []}
+    read={true}
+    selected={true}
+    starred={false}
+    subject="We need to program the primary TCP hard drive!"
+  />
+  <Connect(Message)
+    id={5}
+    labels={
+      Array [
+        "personal",
+      ]
+    }
+    read={false}
+    starred={false}
+    subject="If we override the interface, we can get to the HTTP feed through the virtual EXE interface!"
+  />
+  <Connect(Message)
+    id={6}
+    labels={Array []}
+    read={true}
+    starred={true}
+    subject="We need to back up the wireless GB driver!"
+  />
+  <Connect(Message)
+    id={7}
+    labels={
+      Array [
+        "dev",
+        "personal",
+      ]
+    }
+    read={true}
+    starred={false}
+    subject="We need to index the mobile PCI bus!"
+  />
+  <Connect(Message)
+    id={8}
+    labels={Array []}
+    read={true}
+    starred={true}
+    subject="If we connect the sensor, we can get to the HDD port through the redundant IB firewall!"
+  />
+</div>
+`;

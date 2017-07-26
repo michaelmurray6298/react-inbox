@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchMessages } from '../actions';
 import Message from './Message.js';
 
-class MessageList extends Component {
+export class MessageList extends Component {
   componentDidMount() {
     this.props.fetchMessages();
   }

@@ -10,19 +10,19 @@ const MessageBodyRoute = props => (
   <MessageBody location={props.location.pathname} match={props.match} />
 );
 
-class Message extends PureComponent {
+export class Message extends PureComponent {
   render() {
     const read = this.props.read ? 'read' : 'unread';
-    const selected = this.props.selected ? 'selected' : '';
-    const checked = this.props.selected ? 'checked' : '';
+    const selected = this.props.selected ? 'selected' : "";
+    const checked = this.props.selected ? 'checked' : "";
     const starred = this.props.starred ? 'fa-star' : 'fa-star-o';
     return (
-      <div className="container">
-        <div className={`row message ${read} ${selected}`}>
+        <div id="read-value" className={`row message ${read} ${selected}`}>
           <div className="col-xs-1">
             <div className="row">
               <div className="col-xs-2">
                 <input
+									id="select-button"
                   type="checkbox"
                   checked={`${checked}`}
                   onChange={() => this.props.toggleSelected(this.props.id)}
@@ -30,6 +30,7 @@ class Message extends PureComponent {
               </div>
               <div className="col-xs-2">
                 <i
+									id="star-button"
                   className={`star fa ${starred}`}
                   onClick={() => {
                     this.props.toggleStarred(this.props.id, this.props.starred);
@@ -42,21 +43,18 @@ class Message extends PureComponent {
             {this.props.labels.map(label =>
               <Label label={label} key={this.props.id} />,
             )}
-            <Link onClick={() => this.props.updateReadMessagesById(this.props.id)} to={`/messages/${this.props.id}`}>{this.props.subject}</Link>
+            <Link onClick={() => this.props.updateReadMessagesById(this.props.id)} to={`/messages/${this.props.id}`}>{this.props.subject} </Link>
 
             <Route exact path={`/messages/${this.props.id}`} component={MessageBodyRoute} />
           </div>
         </div>
-      </div>
     );
   }
 }
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   const messages = state.messages;
-  const messageById = state.messagesById;
   return {
     messages,
-    messageById,
   };
 };
 
